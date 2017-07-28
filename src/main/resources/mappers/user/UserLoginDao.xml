@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sinnk.web.module.user.dao.UserLoginDao">
+
+	<insert id="insert" parameterType="userlogin">
+		INSERT INTO
+			tb_user_login(
+				id,
+				user_id,
+				login_date,
+				login_ip,
+				login_type,
+				login_status,
+				create_date,
+				update_date,
+				del_flag
+			)
+			VALUES(
+				#{id},
+				#{userId},
+				#{loginDate},
+				#{loginIp},
+				#{loginType},
+				#{loginStatus},
+				#{createDate},
+				#{updateDate},
+				#{delFlag}
+			)
+		
+	</insert>
+	
+	
+	<select id="getRecentLoginFailRecord" parameterType="user" resultType="userlogin">
+		SELECT
+			*
+		FROM
+			tb_user_login
+		WHERE
+			user_id = #{id}
+		AND
+			login_date > #{locakedDate}
+		ORDER BY
+			login_date DESC
+		LIMIT
+			0,3
+	</select>
+
+	
+
+</mapper>
+

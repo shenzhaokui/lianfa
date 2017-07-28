@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sinnk.web.module.shop.product.dao.ProductDao">
+	
+	<select id="get" resultType="product">
+		SELECT
+			p.id,
+			p.product_name,
+			p.product_description,
+			p.create_date,
+			p.update_date,
+			p.product_category_id,
+			p.big_pic_url,
+			p.small_pic_url,
+			p.original_price,
+			p.current_price,
+			c.category_name AS productCategoryName,
+			s.measurement_unit AS measurementUnit,
+			s.stock AS productStock,
+			m.commission_type AS productCommissionType,
+			m.up_one_level_percentage AS productUpOneLevelPercentage,
+			m.up_two_level_percentage AS productUpTwoLevelPercentage,
+			m.up_three_level_percentage AS productUpThreeLevelPercentage,
+			m.up_four_level_percentage AS productUpFourLevelPercentage,
+			m.up_five_level_percentage AS productUpFiveLevelPercentage,
+			m.up_one_level_fixed_amount AS productUpOneLevelFixedAmount,
+			m.up_two_level_fixed_amount AS productUpTwoLevelFixedAmount,
+			m.up_three_level_fixed_amount AS productUpThreeLevelFixedAmount,
+			m.up_four_level_percentage AS productUpFourLevelFixedAmount,
+			m.up_five_level_percentage AS productUpFiveLevelFixedAmount
+		FROM
+			tb_product AS p
+		LEFT JOIN 
+			tb_product_category AS c 
+		ON 
+			p.product_category_id = c.id
+		LEFT JOIN 
+			tb_product_stock AS s 
+		ON 
+			p.id = s.product_id
+		LEFT JOIN 
+			tb_product_commission AS m 
+		ON 
+			p.id = m.product_id
+		
+		WHERE
+			p.del_flag = '0'
+		AND
+			p.id = #{id}
+		
+	</select>
+	
+	
+	<select id="getAllProduct" resultType="product">
+		SELECT
+			p.id,
+			p.product_name,
+			c.category_name AS productCategoryName
+		FROM
+			tb_product AS p
+		LEFT JOIN 
+			tb_product_category AS c 
+		ON 
+			p.product_category_id = c.id
+		WHERE
+			p.del_flag = '0'
+
+	</select>
+	
+	
+	<select id="getThumbnailsByProductId" parameterType="String" resultType="thumbnail">
+		SELECT
+			id,
+			product_id,
+			thumbnail_url,
+			create_date,
+			update_date,
+			del_flag
+		FROM
+			tb_product_thumbnail
+		WHERE
+			product_id = #{productid}
+	</select>
+	
+	
+	<update id="update" parameterType="product">
+		UPDATE
+			tb_product
+		SET
+			product_name = #{productName},
+			product_description = #{productDescription},
+			product_category_id = #{productCategoryId},
+			update_date = #{updateDate},
+			big_pic_url = #{bigPicUrl},
+			small_pic_url = #{smallPicUrl}
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="updateStockMeasurementUnit">
+		UPDATE
+			tb_product_stock
+		SET
+			measurement_unit = #{unit}
+		WHERE
+			product_id = #{productid}
+	</update>
+	
+	<select id="getProductAmountByProductName" parameterType="String" resultType="long">
+		SELECT
+			COUNT(*)
+		FROM
+			tb_product
+		WHERE
+			product_name = #{name}
+	</select>
+	
+	<update id="updateCommission" parameterType="product">
+		UPDATE
+			tb_product_commission
+		SET
+			commission_type = #{productCommissionType},
+			up_one_level_percentage = #{productUpOneLevelPercentage},
+			up_two_level_percentage = #{productUpTwoLevelPercentage},
+			up_three_level_percentage = #{productUpThreeLevelPercentage},
+			up_four_level_percentage = #{productUpFourLevelPercentage},
+			up_five_level_percentage = #{productUpFiveLevelPercentage},
+			up_one_level_fixed_amount = #{productUpOneLevelFixedAmount},
+			up_two_level_fixed_amount = #{productUpTwoLevelFixedAmount},
+			up_three_level_fixed_amount = #{productUpThreeLevelFixedAmount},
+			up_four_level_fixed_amount = #{productUpFourLevelFixedAmount},
+			up_five_level_fixed_amount = #{productUpFiveLevelFixedAmount},
+			update_date = #{updateDate}
+		WHERE
+			product_id = #{id}
+	</update>
+	
+	<insert id="addProductStock" parameterType="stock">
+		INSERT INTO
+			tb_product_stock(
+				id,
+				product_id,
+				measurement_unit,
+				stock,
+				create_date,
+				update_date,
+				del_flag
+			)
+			VALUES(
+				#{id},
+				#{productId},
+				#{measurementUnit},
+				#{stock},
+				#{createDate},
+				#{updateDate},
+				#{delFlag}
+			)
+	</insert>
+	
+	<insert id="addProductCommission" parameterType="commission">
+		INSERT INTO
+			tb_product_commission(
+				id,
+				product_id,
+				commission_type,
+				up_one_level_percentage,
+				up_two_level_percentage,
+				up_three_level_percentage,
+				up_four_level_percentage,
+				up_five_level_percentage,
+				up_one_level_fixed_amount,
+				up_two_level_fixed_amount,
+				up_three_level_fixed_amount,
+				up_four_level_fixed_amount,
+				up_five_level_fixed_amount,
+				create_date,
+				update_date,
+				del_flag
+			)
+			VALUES(
+				#{id},
+				#{productId},
+				#{commissionType},
+				#{upOneLevelPercentage},
+				#{upTwoLevelPercentage},
+				#{upThreeLevelPercentage},
+				#{upFourLevelPercentage},
+				#{upFiveLevelPercentage},
+				#{upOneLevelFixedAmount},
+				#{upTwoLevelFixedAmount},
+				#{upThreeLevelFixedAmount},
+				#{upFourLevelFixedAmount},
+				#{upFiveLevelFixedAmount},
+				#{createDate},
+				#{updateDate},
+				#{delFlag}
+			)
+	</insert>
+	
+	
+	<insert id="addProductThumbnail" parameterType="thumbnail">
+		
+		INSERT INTO
+			tb_product_thumbnail(
+				id,
+				product_id,
+				thumbnail_url,
+				create_date,
+				update_date,
+				del_flag
+			)
+			VALUES(
+				#{id},
+				#{productId},
+				#{thumbnailUrl},
+				#{createDate},
+				#{updateDate},
+				#{delFlag}
+			)
+		
+	</insert>
+	
+	
+	<insert id="insert" parameterType="product">
+		INSERT INTO
+			tb_product(
+				id,
+				product_name,
+				product_description,
+				product_category_id,
+				create_date,
+				update_date,
+				del_flag,
+				big_pic_url,
+				small_pic_url,
+				original_price,
+				current_price
+			)
+			VALUES(
+				#{id},
+				#{productName},
+				#{productDescription},
+				#{productCategoryId},
+				#{createDate},
+				#{updateDate},
+				#{delFlag},
+				#{bigPicUrl},
+				#{smallPicUrl},
+				#{originalPrice},
+				#{currentPrice}
+			)
+	</insert>
+	
+	<select id="getProductListByCategoryId" resultType="product" parameterType="String">
+		SELECT
+			*
+		FROM
+			tb_product
+		WHERE
+			product_category_id = #{categoryid}
+		AND
+			del_flag = '0'
+	</select>
+	
+</mapper>

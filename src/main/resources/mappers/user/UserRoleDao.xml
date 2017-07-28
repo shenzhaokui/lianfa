@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sinnk.web.module.user.dao.UserRoleDao">
+	
+	<insert id="insert" parameterType="userRole">
+		INSERT INTO
+			tb_user_role(
+				id,
+				user_id,
+				role_id,
+				create_date,
+				update_date,
+				del_flag
+			)
+			VALUES(
+				#{id},
+				#{userId},
+				#{roleId},
+				#{createDate},
+				#{updateDate},
+				#{delFlag}
+			)
+	</insert>
+	
+	
+	
+	<select id="getUserRoleByUidRid" resultType="userRole">
+		SELECT
+			*
+		FROM
+			tb_user_role
+		WHERE
+			user_id = #{uid}
+		AND
+			role_id = #{rid}
+	</select>
+	
+	
+	<select id="getUserRoleListByUserId" parameterType="String" resultType="userRole">
+		SELECT
+			*
+		FROM
+			tb_user_role
+		WHERE
+			user_id = #{uid}
+	</select>
+	
+	
+	<select id="getUserRoleListByUsername" parameterType="String" resultType="userRole">
+		SELECT
+			role_id
+		FROM
+			tb_user_role
+		WHERE
+			user_id = (
+				SELECT
+					u.id
+				FROM
+					tb_user u
+				WHERE
+					u.username = #{username}
+			)
+	
+	
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sinnk.web.module.shop.product.dao.ProductThumbnailDao">
+	
+	<insert id="insert" parameterType="thumbnail">
+		
+		INSERT INTO
+			tb_product_thumbnail(
+				id,
+				product_id,
+				thumbnail_url,
+				create_date,
+				update_date,
+				del_flag
+			)
+			VALUES(
+				#{id},
+				#{productId},
+				#{thumbnailUrl},
+				#{createDate},
+				#{updateDate},
+				#{delFlag}
+			)
+		
+	</insert>
+	
+	
+	
+	<select id="get" resultType="thumbnail" parameterType="String">
+		SELECT
+			*
+		FROM
+			tb_product_thumbnail
+		WHERE
+			id = #{id}
+	
+	</select>
+	
+	
+	<update id="update" parameterType="thumbnail">
+		UPDATE
+			tb_product_thumbnail
+		SET
+			thumbnail_url = #{thumbnailUrl},
+			update_date = #{updateDate}
+		WHERE
+			id = #{id}
+	</update>
+	
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM
+			tb_product_thumbnail
+		WHERE
+			id = #{id}
+	</delete>
+	
+	
+</mapper>

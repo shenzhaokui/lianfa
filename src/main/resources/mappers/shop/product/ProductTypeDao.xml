@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sinnk.web.module.shop.product.dao.ProductTypeDao">
+	
+	<select id="getTypeListByProductId" parameterType="String" resultType="producttype">
+		SELECT
+			id,
+			type_name,
+			img_url
+		FROM
+			tb_product_type
+		WHERE
+			product_id = #{productid}
+	</select>
+	
+	
+	<insert id="insert" parameterType="producttype">
+		INSERT INTO
+			tb_product_type(
+				id,
+				product_id,
+				type_name,
+				img_url,
+				create_date,
+				update_date,
+				del_flag
+			)
+			VALUES(
+				#{id},
+				#{productId},
+				#{typeName},
+				#{imgUrl},
+				#{createDate},
+				#{updateDate},
+				#{delFlag}
+			)
+	</insert>
+	
+	
+	<select id="get" resultType="producttype">
+		SELECT
+			*
+		FROM
+			tb_product_type
+		WHERE
+			id = #{id}
+	</select>
+	
+	<delete id="deleteProductTypeById" parameterType="String">
+		DELETE FROM
+			tb_product_type
+		WHERE
+			id = #{id}
+	</delete>
+	
+</mapper>

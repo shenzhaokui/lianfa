@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sinnk.web.module.user.dao.UserDao">
+
+
+	<select id="get" resultType="user">
+		SELECT
+			*
+		FROM
+			tb_user u
+		WHERE
+			u.id = #{id}
+	</select>
+
+	
+	<select id="getUserByUsername" parameterType="String" resultType="user">
+		SELECT
+			*
+		FROM
+			tb_user
+		WHERE
+			username = #{username}
+	</select>
+	
+	
+	<select id="getUserById" parameterType="String" resultType="user">
+		SELECT
+			*
+		FROM
+			tb_user
+		WHERE
+			id = #{id}
+	</select>
+	
+	<!-- 通过微信OpenId获取用户对象 -->
+	<select id="getUserByOpenId" resultType="user" parameterType="user">
+		SELECT 
+			<include refid="userColumnItem" />
+		FROM
+			tb_user u
+		WHERE
+			u.open_id = #{openid}
+		AND
+			u.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	
+	<!-- 通过email获取用户对象 -->
+	<select id="getUserByEmail" resultType="user" parameterType="user">
+		SELECT 
+			<include refid="userColumnItem" />
+		FROM
+			tb_user u
+		WHERE
+			u.email = #{email}
+		AND
+			u.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	
+	<!-- 通过QQ获取用户对象 -->
+	<select id="getUserByQQ" resultType="user" parameterType="user">
+		SELECT 
+			<include refid="userColumnItem" />
+		FROM
+			tb_user u
+		WHERE
+			u.qq = #{qq}
+		AND
+			u.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	
+	<!-- 通过身份证号码获取用户对象 -->
+	<select id="getUserByIdentityCardId" resultType="user" parameterType="user">
+		SELECT 
+			<include refid="userColumnItem" />
+		FROM
+			tb_user u
+		WHERE
+			u.identity_card_number = #{identitycardid}
+		AND
+			u.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	
+	<!-- 通过手机号码获取用户对象 -->
+	<select id="getUserByPhoneNumber" parameterType="user" resultType="user">
+		SELECT 
+			<include refid="userColumnItem" />
+		FROM
+			tb_user u
+		WHERE
+			u.phone_number = #{phonenumber}
+		AND
+			u.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	
+	
+	<!-- 逻辑删除用户 -->
+	<update id="delete" parameterType="user">
+		UPDATE
+			tb_user
+		SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE
+			id = #{id}
+		AND
+			del_flag = #{DEL_FLAG_NORMAL}
+	</update>
+	
+	<!-- 更新用户数据 -->
+	<update id="update" parameterType="user">
+		UPDATE
+			tb_user
+		SET
+			<if test="password!=null and password!=''">password = #{password},</if>
+			<if test="openId!=null and openId!=''">open_id = #{openId},</if>
+			<if test="trueName!=null and trueName!=''">true_name = #{trueName},</if>
+			<if test="gender!=null and gender!=''">gender = #{gender},</if>
+			<if test="age!=null and age!=''">age = #{age},</if>
+			<if test="identityCardNumber!=null and identityCardNumber!=''">identity_card_number = #{identityCardNumber},</if>
+			<if test="address!=null and address!=''">address = #{address},</if>
+			<if test="phoneNumber!=null and phoneNumber!=''">phone_number = #{phoneNumber},</if>
+			<if test="email!=null and email!=''">email = #{email},</if>
+			<if test="qq!=null and qq!=''">qq = #{qq},</if>
+			update_date = #{updateDate}
+		WHERE
+			id = #{id}
+		AND
+			del_flag = #{DEL_FLAG_NORMAL}
+			
+	</update>
+	
+	
+	<insert id="insert" parameterType="user">
+		INSERT INTO
+			tb_user(
+				id,
+				username,
+				password,
+				user_type,
+				true_name,
+				gender,
+				age,
+				identity_card_number,
+				country,
+				province,
+				city,
+				address,
+				phone_number,
+				email,
+				qq,
+				open_id,
+				up_one_id,
+				up_two_id,
+				up_three_id,
+				up_four_id,
+				up_five_id,
+				current_depth,
+				current_position,
+				del_flag,
+				create_date,
+				update_date,
+				down_one_level_amount,
+				down_two_level_amount,
+				down_three_level_amount,
+				down_four_level_amount,
+				down_five_level_amount,
+				cumulative_commission,
+				cumulative_withdraw,
+				cumulative_consumptions,
+				current_consumable_cash,
+				current_withdraw_able_cash,
+				delivery_name,
+				delivery_phone,
+				delivery_address,
+				user_ip,
+				locked,
+				locaked_date,
+				unlock_date
+			)
+			VALUES(
+				#{id},
+				#{username},
+				#{password},
+				#{userType},
+				#{trueName},
+				#{gender},
+				#{age},
+				#{identityCardNumber},
+				#{country},
+				#{province},
+				#{city},
+				#{address},
+				#{phoneNumber},
+				#{email},
+				#{qq},
+				#{openId},
+				#{upOneId},
+				#{upTwoId},
+				#{upThreeId},
+				#{upFourId},
+				#{upFiveId},
+				#{currentDepth},
+				#{currentPosition},
+				#{delFlag},
+				#{createDate},
+				#{updateDate},
+				#{downOneLevelAmount},
+				#{downTwoLevelAmount},
+				#{downThreeLevelAmount},
+				#{downFourLevelAmount},
+				#{downFiveLevelAmount},
+				#{cumulativeCommission},
+				#{cumulativeWithdraw},
+				#{cumulativeConsumptions},
+				#{currentConsumableCash},
+				#{currentWithdrawAbleCash},
+				#{deliveryName},
+				#{deliveryPhone},
+				#{deliveryAddress},
+				#{userIp},
+				#{locked},
+				#{locakedDate},
+				#{unlockDate}
+			)
+	</insert>
+	
+	
+	<select id="getCurrentTotalUserMaxDepth" resultType="long">
+		SELECT
+			s.total_depth
+		FROM
+			tb_user_statics s
+		WHERE
+			id = '0'
+	</select>
+	
+	<select id="getCurrentTotalUserAmount" resultType="long">
+		SELECT
+			s.total_amount
+		FROM
+			tb_user_statics s
+		WHERE
+			id = '0'
+	</select>
+	
+	<update id="setCurrentTotalUserMaxDepth" parameterType="long">
+		UPDATE
+			tb_user_statics
+		SET
+			total_depth = #{depth}
+		WHERE
+			id = '0'
+	</update>
+	
+	<update id="setCurrentTotalUserAmount" parameterType="long">
+		UPDATE
+			tb_user_statics
+		SET
+			total_amount = #{amount}
+		WHERE
+			id = '0'
+	</update>
+	
+	
+	
+	<sql id="userColumnItem">
+		u.id,
+		u.principal_id,
+		u.open_id,
+		u.true_name,
+		u.gender,
+		u.age,
+		u.identity_card_number,
+		u.address,
+		u.phone_number,
+		u.email,
+		u.qq,
+		u.up_one_id,
+		u.up_two_id,
+		u.up_three_id,
+		u.up_four_id,
+		u.up_five_id,
+		u.current_depth,
+		u.current_position,
+		u.del_flag,
+		u.create_date,
+		u.update_date,
+		u.down_one_level_amount,
+		u.down_two_level_amount,
+		u.down_three_level_amount,
+		u.down_four_level_amount,
+		u.down_five_level_amount,
+		u.cumulative_commission,
+		u.cumulative_withdraw,
+		u.cumulative_consumptions,
+		u.current_consumable_cash,
+		u.current_withdraw_able_cash,
+		u.delivery_name,
+		u.delivery_phone,
+		u.delivery_address
+	</sql>
+	
+	
+	<update id="setDownOneLevelAmount" parameterType="user">
+		UPDATE
+			tb_user
+		SET
+			down_one_level_amount = #{downOneLevelAmount},
+			update_date = #{updateDate}
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="setDownTwoLevelAmount" parameterType="user">
+		UPDATE
+			tb_user
+		SET
+			down_two_level_amount = #{downTwoLevelAmount},
+			update_date = #{updateDate}
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="setDownThreeLevelAmount" parameterType="user">
+		UPDATE
+			tb_user
+		SET
+			down_three_level_amount = #{downThreeLevelAmount},
+			update_date = #{updateDate}
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="setDownFourLevelAmount" parameterType="user">
+		UPDATE
+			tb_user
+		SET
+			down_four_level_amount = #{downFourLevelAmount},
+			update_date = #{updateDate}
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="setDownFiveLevelAmount" parameterType="user">
+		UPDATE
+			tb_user
+		SET
+			down_five_level_amount = #{downFiveLevelAmount},
+			update_date = #{updateDate}
+		WHERE
+			id = #{id}
+	</update>
+	
+	
+	<select id="getUserAmount" resultType="long">
+		SELECT
+			COUNT(*)
+		FROM
+			tb_user
+		WHERE
+			del_flag = '0'
+	</select>
+	
+	
+	<select id="getUserAmountByUserId" parameterType="String" resultType="long">
+		SELECT
+			COUNT(*)
+		FROM
+			tb_user
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="getUserAmountByUsername" parameterType="String" resultType="long">
+		SELECT
+			COUNT(*)
+		FROM
+			tb_user
+		WHERE
+			username = #{username}
+	</select>
+	
+	<select id="getUserAmountByOpenId" parameterType="String" resultType="long">
+		SELECT
+			COUNT(*)
+		FROM
+			tb_user
+		WHERE
+			open_id = #{openid}
+	</select>
+	
+	<select id="getUserAmountByEmail" parameterType="String" resultType="long">
+		SELECT
+			COUNT(*)
+		FROM
+			tb_user
+		WHERE
+			email = #{email}
+	</select>
+	
+	<select id="getUserAmountByIdentityCardNumber" parameterType="String" resultType="long">
+		SELECT
+			COUNT(*)
+		FROM
+			tb_user
+		WHERE
+			identity_card_number = #{idcard}
+	</select>
+	
+	<select id="getUserAmountByPhoneNumber" parameterType="String" resultType="long">
+		SELECT
+			COUNT(*)
+		FROM
+			tb_user
+		WHERE
+			phone_number = #{phone}
+	</select>
+	
+	<select id="getUserAmountByQQ" parameterType="String" resultType="long">
+		SELECT
+			COUNT(*)
+		FROM
+			tb_user
+		WHERE
+			qq = #{qq}
+	</select>
+	
+	<update id="lockAccount" parameterType="user">
+		UPDATE
+			tb_user
+		SET
+			locked = #{locked},
+			locaked_date = #{locakedDate},
+			unlock_date = #{unlockDate},
+			update_date = #{updateDate}
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="unlockAccount" parameterType="user">
+		UPDATE
+			tb_user
+		SET
+			locked = #{locked},
+			update_date = #{updateDate}
+		WHERE
+			id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd"
+	default-lazy-init="true">
+
+	<context:property-placeholder
+		ignore-unresolvable="true" location="classpath:config.properties" />
+
+
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+
+
+	<bean id="ShiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager"></property>
+		<property name="filters">
+			<map>
+				<entry key="authc" value-ref="LianfaFormAuthenticationFilter"></entry>
+			</map>
+		</property>
+		<property name="filterChainDefinitions">
+			<value>
+				${user.url}/login = authc
+				${user.url}/logout = logout
+				${user.url}/register = anon
+				${user.url}/regstepone = anon
+				${user.url}/regsteptwo = anon
+				${user.url}/updatereg = anon
+				${user.url}/** = authc
+				${admin.url}/login = authc
+				${admin.url}/logout = logout
+				${admin.url}/** = authc
+				/** = anon
+			</value>
+		</property>
+	</bean>
+
+
+
+	<!-- Shiro SecurityManager 配置 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="sinnkRealm"></property>
+		<property name="cacheManager" ref="shiroCacheManager"></property>
+	</bean>
+
+	<!-- 自定义认证管理器 -->
+	<bean id="LianfaFormAuthenticationFilter"
+		class="com.sinnk.web.common.authc.filter.SinnkFormAuthenticationFilter">
+	</bean>
+
+	<!-- shiro cache manager -->
+	<bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManager" ref="cacheManager"></property>
+	</bean>
+
+	<!-- Ehcache 缓存管理器 -->
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:cache/config/ehcache.xml"></property>
+	</bean>
+
+
+
+	<!-- 自定义realm -->
+	<bean id="sinnkRealm" class="com.sinnk.web.common.authc.realms.SinnkRealm"></bean>
+	
+
+</beans>
