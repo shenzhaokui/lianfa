@@ -39,6 +39,7 @@ public class UserAuthcController extends BaseController {
 
 	@Autowired
 	private UserCommonService userService;
+	
 
 	private static final String USER_LOGIN_PAGE = "authc/pc/userlogin";
 	private static final String USER_REG_PAGE = "authc/pc/userregister";
